@@ -1,4 +1,6 @@
-# emotion-recognition-using-deep-learning
+# Emotion-recognition-using-deep-learning
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/sivaabhishek/emotion-recognition-using-deep-learning/blob/main/LICENSE)
 
 Link for Dataset : https://www.kaggle.com/deadskull7/fer2013
 
