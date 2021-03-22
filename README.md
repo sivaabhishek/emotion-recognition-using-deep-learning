@@ -4,7 +4,7 @@ Link for Dataset : https://www.kaggle.com/deadskull7/fer2013
 
 ## Program Execution
 
-### First run the dataset_prepare.py
+### First run the "dataset_prepare.py"
 
 ### If u want to see the types of learners live then run the "GUI_show.py"
 
