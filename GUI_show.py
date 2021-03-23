@@ -29,12 +29,6 @@ class Ui_MainWindow(object):
         self.label.setText( "" )
         self.label.setObjectName( "label" )
 
-        # self.label = QtWidgets.QFrame(self.centralwidget)
-        # self.label.setGeometry(QtCore.QRect(230, 100, 691, 401))
-        # self.label.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        # self.label.setFrameShadow(QtWidgets.QFrame.Raised)
-        # self.label.setObjectName("label")
-
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
         self.pushButton_2.setGeometry(QtCore.QRect(520, 710, 93, 28))
         self.pushButton_2.setObjectName("pushButton_2")
@@ -60,7 +54,7 @@ class Ui_MainWindow(object):
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1119, 26))
         self.menubar.setObjectName("menubar")
         MainWindow.setMenuBar(self.menubar)
-        
+
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
