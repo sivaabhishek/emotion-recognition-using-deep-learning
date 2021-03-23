@@ -11,6 +11,7 @@ from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 
+
 # plots accuracy and loss curves
 def plot_model_history(model_history):
     """
@@ -39,7 +40,6 @@ def plot_model_history(model_history):
     fig.savefig( 'plot.png' )
     plt.show()
 
-
 # Define data generators
 train_dir = 'data/train'
 val_dir = 'data/test'
@@ -47,7 +47,7 @@ val_dir = 'data/test'
 num_train = 28709
 num_val = 7178
 batch_size = 64
-num_epoch = 150
+num_epoch = 5
 
 # train_datagen = ImageDataGenerator(width_shift_range=0.2,height_shift_range=0.2,rescale=1. / 255)
 # val_datagen = ImageDataGenerator(width_shift_range=0.2,height_shift_range=0.2,rescale=1. / 255)
@@ -144,4 +144,4 @@ else:
         validation_steps=num_val // batch_size )
     model.save_weights( 'model.h5' )
     plot_model_history( model_info )
-    show()
+show()
