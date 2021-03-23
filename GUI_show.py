@@ -27,7 +27,6 @@ class Ui_MainWindow(object):
         self.label.setFrameShape( QtWidgets.QFrame.StyledPanel )
         self.label.setFrameShadow( QtWidgets.QFrame.Raised )
         self.label.setText( "" )
-        self.label.setPixmap( QtGui.QPixmap( "H.png" ) )
         self.label.setObjectName( "label" )
 
         # self.label = QtWidgets.QFrame(self.centralwidget)
