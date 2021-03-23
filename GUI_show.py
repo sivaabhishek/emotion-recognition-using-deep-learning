@@ -1,50 +1,74 @@
 import imutils
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtGui import QImage
+
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+
+from keras.models import load_model
+model = load_model("modd.h5")
+
 import cv2
 import numpy as np
-import time
-
-from emotions import *
 
 
-class Ui_MainWindow( object ):
+class Ui_MainWindow(object):
     def __init__(self):
-        self.centralwidget = QtWidgets.QWidget( MainWindow )
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
 
     def setupUi(self, MainWindow):
-        MainWindow.setObjectName( "MainWindow" )
-        MainWindow.resize( 498, 522 )
-        self.centralwidget.setObjectName( "centralwidget" )
-        self.gridLayout_2 = QtWidgets.QGridLayout( self.centralwidget )
-        self.gridLayout_2.setObjectName( "gridLayout_2" )
-        self.horizontalLayout = QtWidgets.QHBoxLayout()
-        self.horizontalLayout.setObjectName( "horizontalLayout" )
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(1119, 860)
+
+        self.centralwidget.setObjectName("centralwidget")
+
         self.label = QtWidgets.QLabel( self.centralwidget )
+        self.label.setGeometry( QtCore.QRect( 230, 100, 691, 401 ) )
+        self.label.setFrameShape( QtWidgets.QFrame.StyledPanel )
+        self.label.setFrameShadow( QtWidgets.QFrame.Raised )
         self.label.setText( "" )
-        self.label.setPixmap( QtGui.QPixmap( "images/H.png" ) )
+        self.label.setPixmap( QtGui.QPixmap( "H.png" ) )
         self.label.setObjectName( "label" )
-        self.horizontalLayout.addWidget( self.label )
-        self.gridLayout = QtWidgets.QGridLayout()
-        self.gridLayout.setObjectName( "gridLayout" )
-        self.horizontalLayout.addLayout( self.gridLayout )
-        self.gridLayout_2.addLayout( self.horizontalLayout, 0, 0, 1, 2 )
-        self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_2.setObjectName( "horizontalLayout_2" )
-        self.pushButton_2 = QtWidgets.QPushButton( self.centralwidget )
-        self.pushButton_2.setObjectName( "pushButton_2" )
-        self.horizontalLayout_2.addWidget( self.pushButton_2 )
-        self.gridLayout_2.addLayout( self.horizontalLayout_2, 1, 0, 1, 1 )
-        spacerItem = QtWidgets.QSpacerItem( 313, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum )
-        self.gridLayout_2.addItem( spacerItem, 1, 1, 1, 1 )
-        MainWindow.setCentralWidget( self.centralwidget )
-        self.statusbar = QtWidgets.QStatusBar( MainWindow )
-        self.statusbar.setObjectName( "statusbar" )
-        MainWindow.setStatusBar( self.statusbar )
+
+        # self.label = QtWidgets.QFrame(self.centralwidget)
+        # self.label.setGeometry(QtCore.QRect(230, 100, 691, 401))
+        # self.label.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        # self.label.setFrameShadow(QtWidgets.QFrame.Raised)
+        # self.label.setObjectName("label")
+
+        self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton_2.setGeometry(QtCore.QRect(520, 710, 93, 28))
+        self.pushButton_2.setObjectName("pushButton_2")
+
+        self.op = QtWidgets.QLabel(self.centralwidget)
+        self.op.setGeometry(QtCore.QRect(360, 540, 421, 111))
+
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(25)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+
+        self.op.setFont(font)
+        self.op.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.op.setAlignment(QtCore.Qt.AlignCenter)
+        self.op.setObjectName("op")
+
+        MainWindow.setCentralWidget(self.centralwidget)
+
+        self.menubar = QtWidgets.QMenuBar(MainWindow)
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 1119, 26))
+        self.menubar.setObjectName("menubar")
+        MainWindow.setMenuBar(self.menubar)
+        
+        self.statusbar = QtWidgets.QStatusBar(MainWindow)
+        self.statusbar.setObjectName("statusbar")
+        MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi( MainWindow )
         self.pushButton_2.clicked.connect( self.loadImage )
-        QtCore.QMetaObject.connectSlotsByName( MainWindow )
+        QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
         self.tmp = None  # Will hold the temporary image for display
         self.started = False
@@ -61,30 +85,33 @@ class Ui_MainWindow( object ):
             cropped_img = np.expand_dims( np.expand_dims( cv2.resize( roi_gray, (48, 48) ), -1 ), 0 )
             prediction = model.predict( cropped_img )
             maxindex = int( np.argmax( prediction ) )
-            cv2.putText( self.image, emotion_dict[maxindex] + " Listener", (x + 20, y - 60), cv2.FONT_HERSHEY_SIMPLEX,
-                         1, (255, 255, 255), 2, cv2.LINE_AA )
+            self.op.setText(emotion_dict[maxindex] + " Listener")
+            print(emotion_dict[maxindex] + " Listener")
 
     def loadImage(self):
         """ This function will load the camera device, obtain the image
             and set it to label using the setPhoto function
         """
-        if self.started:
-            self.started = False
-            self.pushButton_2.setText( 'Start' )
-        else:
-            self.started = True
-            self.pushButton_2.setText( 'Stop' )
-        model.load_weights( 'model.h5' )
         cam = True  # True for webcam
         if cam:
             vid = cv2.VideoCapture( 0 )
         else:
             vid = cv2.VideoCapture( 'video.mp4' )
 
+        if self.started:
+            self.started = False
+            self.pushButton_2.setText( 'Start' )
+            cv2.destroyAllWindows()
+            MainWindow.close()
+            sys.exit()
+        else:
+            self.started = True
+            self.pushButton_2.setText( 'Exit' )
+
         while True:
 
             ret, self.image = vid.read()
-            self.image = imutils.resize( self.image, height=480 )
+            self.image = imutils.resize( self.image, height=401 )
 
             if not ret:
                 break
@@ -108,11 +135,11 @@ class Ui_MainWindow( object ):
             to set at the label.
         """
         self.tmp = image
-        image = imutils.resize( image, width=640 )
+        image = imutils.resize( image, width=691 )
         frame = cv2.cvtColor( image, cv2.COLOR_BGR2RGB )
         image = QImage( frame, frame.shape[1], frame.shape[0], frame.strides[0], QImage.Format_RGB888 )
         self.label.setPixmap( QtGui.QPixmap.fromImage( image ) )
-
+        # self.label.show()
 
     def update(self):
         img = self.image
@@ -128,6 +155,7 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication( sys.argv )
+    app.setWindowIcon( QtGui.QIcon( 'H.png' ) )
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()
     ui.setupUi( MainWindow )
